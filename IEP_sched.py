@@ -126,7 +126,7 @@ def R_add(s_info, t_info, total, csv_file):
                     lines[index][1] = t[2][0]
                     
     #Renames the col[0] values to get rid of any grade indication 
-    for index in range(len(lines)):
+    for index in range(1, len(lines)):
         lines[index][0] = (lines[index][0][:len(lines[index][0])-2])
                 
     with open(csv_file, "w") as file:
@@ -137,3 +137,4 @@ def R_add(s_info, t_info, total, csv_file):
 # Print statements for the methods.
 # L = R_format('IEP_data.txt','R_out.csv')
 # R_add(L[0],L[1],L[2], 'R_out.csv')
+
