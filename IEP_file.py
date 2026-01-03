@@ -20,7 +20,8 @@ def read_file(input_file):
             for i in range(len(idv)):
                 try:
                     int(idv[i])
-                    time_slots[len(time_slots)-1].append(idv[i])
+                    if int(idv[i]) > 5:
+                        time_slots[len(time_slots)-1].append(idv[i])
                     
                 except:
                     if i >= 3:
@@ -43,7 +44,7 @@ def read_file(input_file):
         
     return (IEP_combiner.get_all())
 
-read_file('IEP_data.txt')
+# read_file('IEP_data.txt')
 # Print Statement for file, Must Comment out if trying to use IEP_sched
 
 #Used for the IEP_sched.R_format method
