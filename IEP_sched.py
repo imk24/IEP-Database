@@ -37,9 +37,9 @@ def R_format(read_file, csv_file):
                 students.append(stud)
                 
                 for t in time[:len(time)-1].split(',')[3].split():
+                    t = t + (time[:len(time)-1].split(',')[1])
                     if not t in total_subs:
                         total_subs.append(t)
-                      
                 val = time[:len(time)-1].split(',')[3].split()
                
                 val_1 = time[:len(time)].split(',')[4].split()
@@ -61,13 +61,14 @@ def R_format(read_file, csv_file):
         file.write(",".join(students) + "\n")
             
         for i in range(len(total_subs)):
-            file.write(total_subs[i] + ',' + ",".join([','] * (len(students) -5)) + "\n")
+            file.write(total_subs[i] + ",".join([','] * (len(students) -6)) + "\n")
     
     return (s_subs, t_subs, total_subs)
 
 #Adds rest of the info into the premade R_format
 def R_add(s_info, t_info, total, csv_file):
-    
+    #Found it easiest to use a dictionary to place holder the values
+    d = {}
     file = open(csv_file)
     lines = file.readlines()
 
@@ -77,36 +78,57 @@ def R_add(s_info, t_info, total, csv_file):
     
         #Checks if the student data correlates to the subject and student name and then adds the minutes for the student
         for i in range(2, len(lines[index])):
+            elm = 0
             for s in s_info:
-                if lines[0][i] in s and lines[index][0] in s:
+                for e in range(len(lines[index][0])):
+                    if lines[index][0][e] == " ":
+                        elm = lines[index][0][:e]
+
+                #Ensuring the value is in both sets
+                if lines[0][i] in s and elm in s:
                     
                     lines[index][1] = s[3].strip()
                     lines[index][i] = s[2]
-                    if lines[index][0] in IEP_setup.Grades[0][lines[index][1].strip()]:
-                        lines[index][7] = IEP_setup.get_time(lines[index][1].strip(), lines[index][0])[0]
-                        lines[index][8] = IEP_setup.get_time(lines[index][1].strip(), lines[index][0])[1]
+                    if elm in IEP_setup.Grades[0][lines[index][1].strip()]:
+                        d[lines[index][0]] = (IEP_setup.get_time(lines[index][1].strip(), elm))
+                        #Takes the key and appends the correct one to each data set
+                        lines[index][len(lines[index]) -2] = d.get(lines[index][0])[0]
+                        lines[index][len(lines[index]) -1] = d.get(lines[index][0])[1]
 
                     else:
                         line = lines[index][0]
                         for l in range(len(line)):
                             if line[l] == '{':
                                 if (line[:l] + '{Gen}') in IEP_setup.Grades[0][lines[index][1].strip()]:
-                                    lines[index][7] = IEP_setup.get_time(lines[index][1].strip(), line[:l] + '{Gen}')[0]
-                                    lines[index][8] = IEP_setup.get_time(lines[index][1].strip(), line[:l] + '{Gen}')[1]                                                                
-                                
-                                if line[:l] == 'BM':
-                                    lines[index][7] = 'ALL'
-                                    lines[index][8] = 'ALL'                                                              
-                                
+                                    
+                                    if not lines[index][0] in d:
+                                        d[lines[index][0]] = IEP_setup.get_time(lines[index][0][len(lines[index][0])-1:], line[:l] + '{Gen}')
+
+                                    lines[index][len(lines[index]) -2] = d.get(lines[index][0])[0]
+                                    lines[index][len(lines[index]) -1] = d.get(lines[index][0])[1]
+                                    
+                                #BM and BS were assigned all in this case
+                                if line[:l] == 'BM' or line[:l] == 'BS':
+                                    d[lines[index][0]] = 'ALL'
+                                    
+                                    lines[index][len(lines[index]) -2] = 'ALL'
+                                    lines[index][len(lines[index]) -1] = 'ALL'    
+                                    
+            #Adds teachers and grades into appropraite rows                   
             for t in t_info:
-                if lines[index][0] in t[1]:
+                for each in t[1]:
+                    if lines[index][0] == (each + " " + t[2][0]):
+                        lines[index][1] = t[2][0]
+                        lines[index][2] = t[0]
+                    
+                if len(t[1]) == 1 and (t[1][0] in lines[index][0]) and (t[2][0] in lines[index][0]):
                     lines[index][2] = t[0]
                     lines[index][1] = t[2][0]
                     
-                if len(t[1]) == 1 and t[1][0] in lines[index][0]:
-                    lines[index][2] = t[0]
-                    lines[index][1] = t[2][0]
-              
+    #Renames the col[0] values to get rid of any grade indication 
+    for index in range(len(lines)):
+        lines[index][0] = (lines[index][0][:len(lines[index][0])-2])
+                
     with open(csv_file, "w") as file:
         #Writes the lines in each column according to order
         for i in range(len(total)+1):
