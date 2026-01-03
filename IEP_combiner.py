@@ -1,6 +1,5 @@
 import IEP_setup
 
-
 d = {}
 S_list = []
 T_list = []
@@ -86,12 +85,13 @@ def add_student(s_lst, subject, time):
     s_val = False
     val = 0
     grade = s_lst[1]
+    
     #Goes inside of the Teacer list, and if both grade and subject are in the list
     #adds student to the list
 
     for T in T_list:
+       
         for index in T:
-            
             for i in range(len(index)):
                 if (grade == (index[i])):
                     g_val = True
@@ -128,31 +128,29 @@ def add_student(s_lst, subject, time):
                         
                             for j in range(2, len(index)):
                                 if(subject[sub] in index[j], subject[sub], s_lst[0]):
-                                    temp = j
-                                   
+                                    temp = j   
                                     
                             if (i in subject[sub]) and not(subject[sub] in index[temp]):
                                 log = [0]
                                 if subject[sub] in (IEP_setup.get_courses(s_lst[1])):
                                     log = ((IEP_setup.get_time(s_lst[1], subject[sub]), subject[sub]))
-                                
+                                    index.append([subject[sub], time[0][sub], s_lst[0], log[0]])
                                 else:
                                     for s in range(len(subject[sub])):
                                         if subject[sub][s] == '{':
                                             title = (subject[sub][:s]) + "{Gen}"
                                             if title in IEP_setup.Grades[0][s_lst[1]]:
                                                 log = (IEP_setup.get_time(s_lst[1],title))
-                                    
-                                index.append([subject[sub], time[0][sub], s_lst[0], log[0]])
+                                        
+                                    index.append([subject[sub], time[0][sub], s_lst[0], log])
                                 
                                 
                             elif (i in subject[sub]) and (subject[sub] in index[temp]):
                                 (index[index.index(index[temp])].append(time[0][sub]))
                                 (index[index.index(index[temp])].append(s_lst[0]))
-                
-                            
 
-        return T_list
+    return T_list
+
 
 # This method adds all courses for the grade into the schedule
 def add_all(t_lst):
@@ -194,16 +192,20 @@ def make_dict():
                         for idv in current:
                             
                             #Checks if there are mutiple students, in the event not
-                            if len(idv) <= 3:
+                            if len(idv) <= 4:
                                 clss[idv[0]] = [idv[2],idv[1]]
                             #In the event yes
                             else:
                                 for j in range(1, len(idv)):
                                     if j % 2 == 0:
-                                        lst.append([idv[j], idv[j-1]])
+                                        if len(lst) == 0:
+                                            lst.append([idv[j], idv[j-1]])
+                                        else:
+                                            lst.append([idv[j+1], idv[j], idv[j-1]])
+                                    
                                 clss[idv[0]] = lst
-            else:
-                
+                        
+            else: 
                 if (find_course(T, T[i][0])):
                     if T[0][1] in d:
                         d[T[0][1]][T[0][0]] = clss
@@ -249,7 +251,7 @@ def get_all():
                     for val in value.get(sub):
                         for index in range(len(val)):
                             if index % 2 == 0:
-                                if val[index] not in Students:
+                                if type(val[index]) == str and val[index] not in Students:
                                     #Only grabs names not time or grades
                                     try:
                                         int(val[index])
@@ -257,6 +259,7 @@ def get_all():
                                     
                                     except:
                                         Students += (val[index] + " ")
+                                
                             else:
                                 try:
                                     if max_time < int(val[index]):
@@ -288,7 +291,7 @@ def get_all():
                         
                     else:
                         for val in (value.get(sub)[len(value.get(sub))-1]):
-                            if not val in Students:
+                            if type(val) == str and not val in Students:
                                 Students += val + " "
                     
                         print("Subject: " + sub  + "\nAllocated Time: " +  str(value.get(sub)[:2]) + "\nMinutes: " + str(len(IEP_setup.time(value.get(sub)[0], value.get(sub)[1])) * 5) + "\nStudents: " + Students +'\n')
@@ -297,3 +300,4 @@ def get_all():
                              
     return "All Logs Returned" 
 ## END OF CODE
+
