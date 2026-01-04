@@ -1,8 +1,9 @@
-import IEP_combiner
+import IEP_add
+import IEP_combine
 import IEP_setup
 
 #Displays all teacher information
-def read_file(input_file):
+def read_file(input_file, in_file):
     file = open(input_file)
     f_read = file.readlines()
     
@@ -28,23 +29,23 @@ def read_file(input_file):
                         subjects[len(subjects)-1].append(idv[i])
                         i += 1
                         
-            current = IEP_combiner.Student(idv[2], idv[1])
+            current = IEP_add.Student(idv[2], idv[1])
             
             for subject in subjects:
-                (IEP_combiner.add_student(current, subject, time_slots))
-            students = IEP_combiner.Students(current)
+                (IEP_add.add_student(current, subject, time_slots))
+            students = IEP_add.Students(current)
             
         
         elif 'Teacher' in idv:
-            teacher = IEP_combiner.Teacher(idv[2], idv[1])
+            teacher = IEP_add.Teacher(idv[2], idv[1])
             courses = idv[3:]
             for course in courses:
-                teacher = IEP_combiner.add_courses(teacher,course)
-            teachers = IEP_combiner.Teachers(teacher)
+                teacher = IEP_add.add_courses(teacher,course)
+            teachers = IEP_add.Teachers(teacher)
         
-    return (IEP_combiner.get_all())
+    return (IEP_combine.get_all(in_file))
 
-# read_file('IEP_data.txt')
+# read_file('IEP_data.txt', 'IEP_write.txt')
 # Print Statement for file, Must Comment out if trying to use IEP_sched
 
 #Used for the IEP_sched.R_format method
@@ -84,3 +85,4 @@ def sched_student(read):
             info.append(name)
             info.append(subjects)   
     return (info)
+#END
