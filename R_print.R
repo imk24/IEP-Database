@@ -1,7 +1,5 @@
-#Start off by making a copy of the data frame
+#Using R To sharpen output
 df <- R_out
-View(R_out)
-
 
 #View All Headers
 names(df)
@@ -15,17 +13,15 @@ View(x1)
 x1[["Teacher.s."]][x1[["Teacher.s."]] == ""] <- "Not Found"
 
 df[1:3] <- x1
-
 r_count <- nrow(df)
 
 #Now getting rid of all of the na's to clean up the chart
-x1 <- df[4:r_count]
+x1 <- df[4:r_count+1]
 
 x1[is.na(x1)] <- ""
 
-df[4:r_count] <- x1
+df[4:r_count+1] <- x1
 
 #Final Product
 View(df)
                               
-
