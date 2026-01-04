@@ -33,6 +33,8 @@ Once data is input, change the times in the IEP_setup file to specific times.
 
 When wanting to print the data simply either use the IEP_file or IEP_sched. IEP_file prints it out into a txt.format, while IEP_sched prints out in a csv.format which can then be displayed in a Excel or R_chart.
 
+I'd reccomend changing the times as well as changing the way you wanted outputted. The style I had was specific but the way the code is written it should allow for minor changes, ie: adding getting rid of courses, grade levels, etc...
+
 
 
 
