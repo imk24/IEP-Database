@@ -105,7 +105,7 @@ def set_up():
         Grades[0]['1']['Language Arts{Gen}'] = ('9:45','11:25')
         Grades[0]['1']['Win{Gen}'] = ('12:15', '12:45')
         Grades[0]['1']['Language Arts{Sped}'] = ('12:45', '1:15')
-        Grades[0]['1']['SS/SC{Gen}'] = ('1:15', '2:05')
+        Grades[0]['1']['SS{Gen}'] = ('1:15', '2:05')
         Grades[0]['1']['Math{Gen}'] = ('2:05', '3:20')
         
     def S_gen():
