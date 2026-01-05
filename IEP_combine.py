@@ -35,12 +35,14 @@ def make_dict():
                             
                             #Checks if there are mutiple students, in the event not
                             if len(idv) <= 4:
+                                
                                 ##Fix this
-                                if not idv[0] in clss:
-                                    o_lst.append([idv[2],idv[1]])
-                                    clss[idv[0]] = o_lst
+                                if not idv[0] in clss and len(idv) > 2 and type(idv) == list:
+                                    if not [idv[2],idv[1]] in o_lst:
+                                        o_lst.append([idv[2],idv[1]])
+                                        clss[idv[0]] = o_lst
                                     
-                                else:
+                                elif idv[0] in clss and len(idv) > 2:
                                     o_lst.append([idv[2],idv[1], idv[3]])
                                 
                             #In the event yes there are extras
@@ -68,10 +70,13 @@ def make_dict():
                             if type(T[i][j]) == list and len(T[i][j]) > 2:
                                 lst.append([T[i][j][2], T[i][j][1], T[i][j][3]])
                                 clss[T[i][0]] = lst
-                                    
+                else:
+                    d[T[0][1]][T[0][0]] = clss
+                    
+                    
     return d
-
-#Returns and prints a statement containing all teacher info and students in the associated classes      
+# 
+# #Returns and prints a statement containing all teacher info and students in the associated classes      
 def get_all(in_file):
     file = open(in_file, 'w+')
     result = ""
