@@ -33,6 +33,25 @@ Once data is input, change the times in the IEP_setup file to specific times.
 
 When wanting to print the data simply either use the IEP_file or IEP_sched. IEP_file prints it out into a txt.format, while IEP_sched prints out in a csv.format which can then be displayed in a Excel or R_chart.
 
+
+Some quick fixes if the code stops.
+
+Some issues:
+The code may have problems in the IEP_sched where it runs out of index. Just change the R_format method specifically this line. 
+file.write(total_subs[i] + ",".join([','] * (len(students) -15)) + "\n") 
+You may have to write this to check if all lines are equal, simple decode:
+print(len(lines[0]))
+print(len(lines[1]))
+and change accordingly.
+
+You may also run into problems with the file itself and names missing:
+Please include anyone doing special education at the top prior to other subjects, IE:
+
+*Also include this at the very top
+Role, Grade, Name, Class, Minutes
+Teacher, K, AbrahamB, Sped
+Teacher, K, BrittanyL, Math{Gen}
+
 I'd reccomend changing the times as well as changing the way you wanted outputted. The style I had was specific but the way the code is written it should allow for minor changes, ie: adding getting rid of courses, grade levels, etc...
 
 
